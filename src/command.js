@@ -9,6 +9,7 @@ function Command(container) {
 	this.ui = null;
 	this.value = '';
 	this.history = [];
+	this.historyCount = null;
 	this.currentString = '';
 	this.width = '100%';
 	this.height = '300px';
@@ -18,11 +19,6 @@ function Command(container) {
 			me: "I will help you",
 			you: "Sorry, you can't help me",
 			default: "Type 'help me' or 'help you'"
-		},
-		goto: {
-			google: function () {
-				window.open("http://www.google.com");
-			}
 		},
 		default: "type 'help' for help"
 	};
@@ -65,19 +61,27 @@ function Command(container) {
 		}, 500);
 		
 		document.addEventListener('keydown', function(event) {
-
-
-			if(document.activeElement === _this.ui && event.which === 8){
-				event.preventDefault();
-				_this.currentString = _this.currentString.substring(0, _this.currentString.length - 1);
-				_this.ui.value = _this.value + '> ' + _this.currentString + '\n\n\n\n';
-			}
+		
+			console.log(event);
+				
+			if(document.activeElement === _this.ui){
 			
+				if(event.which === 8){
+					event.preventDefault();
+					_this.currentString = _this.currentString.substring(0, _this.currentString.length - 1);
+					_this.ui.value = _this.value + '> ' + _this.currentString + '\n\n\n\n';
+				} else if (event.which === 38) {
+					_this.backHistory();
+				} else if (event.which === 40) {
+					_this.forwardHistory();
+				}
+			}
 			
 			
 		}, false);
 		
 		this.ui.addEventListener('keypress', function(event) {
+		
 					
 			if(event.which === 8){
 				event.preventDefault();
@@ -118,6 +122,28 @@ function Command(container) {
 	this.setup();
 
 }
+
+Command.prototype.backHistory = function () {
+
+	if(this.history.length < 1) return false;
+	if(this.historyCount === null) this.historyCount = this.history.length-1;
+
+	this.historyCount = (this.historyCount < this.history.length-1)?this.historyCount+1:0;
+	this.currentString = this.history[this.historyCount];
+	
+
+};
+
+Command.prototype.forwardHistory = function () {
+
+	if(this.history.length < 1) return false;
+	if(this.historyCount === null) this.historyCount = 0;
+
+	this.historyCount = (this.historyCount <= 0)?this.history.length-1:this.historyCount-1;
+	this.currentString = this.history[this.historyCount];
+	
+
+};
 
 Command.prototype.setSize = function (width, height) {
 	
@@ -181,7 +207,8 @@ Command.prototype.run = function (string) {
 		}
 		
 	}
-		
+	
+	this.historyCount = null;
 	this.ui.scrollTop = 1000000;
 	
 };
@@ -192,7 +219,7 @@ Command.prototype.print = function (string) {
 		return false;
 	}
 	
-	//this.history.unshift(string);
+	this.historyCount = null;
 
 	this.value = this.value + '> ' + string + '\n';
 	this.ui.value = this.value + '> ' + this.currentString + '\n\n\n\n';

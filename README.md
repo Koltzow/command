@@ -28,8 +28,10 @@ You can set the size of the console using `command.setSize(width, height)`. It a
 command.setSize('100%', 300);
 ```
 
-You can print to the console user `command.print(string)`.
+You can print to the console using `command.print(string)`.
 
 ```javascript
 command.print('hello user');
 ```
+
+You can toggle the history user your up and down arrow keys or manually using `command.backHistory()` and `command.forwardHistory()`.
