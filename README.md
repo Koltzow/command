@@ -56,3 +56,5 @@ If you would like to add a command to your existing set of commands you can use 
 ```javascript
 command.add('help.everybody', 'nobody can help everybody');
 ```
+
+To disable and enable the console use `command.disable()` and `command.enable()`. This will remove the abillity to type and hide the type indicator. I can be used to prevent typing while displaying sequences of text or for ajax loading.

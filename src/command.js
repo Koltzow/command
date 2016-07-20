@@ -1,27 +1,23 @@
 function Command(container) {
 
+	var debug = false;
+
 	if(container === undefined || !container || typeof container !== 'object' || container.nodeType !== 1){
-		console.log('Missing container');
+		if(debug) console.log('Missing container');
 		return false;
 	}
 	
 	this.container = container;
 	this.ui = null;
 	this.value = '';
+	this.disabled = false;
 	this.history = [];
 	this.historyCount = null;
 	this.currentString = '';
 	this.width = '100%';
 	this.height = '300px';
 	this.backgroundColor = '#222';
-	this.commands = {
-		help: {
-			me: "I will help you",
-			you: "Sorry, you can't help me",
-			default: "Type 'help me' or 'help you'"
-		},
-		default: "type 'help' for help"
-	};
+	this.commands = {};
 	
 	this.setup = function () {
 	
@@ -51,9 +47,9 @@ function Command(container) {
 		setInterval(function () {
 				
 			if(_this.ui.value === _this.value + '> ' + _this.currentString + '\n\n\n\n' && document.activeElement === _this.ui){
-				_this.ui.value = _this.value + '> ' + _this.currentString + '_' + '\n\n\n\n';
+				_this.ui.value = _this.value + ( !_this.disabled ? '> '+_this.currentString+'_' : '') + '\n\n\n\n';
 			} else {
-				_this.ui.value = _this.value + '> ' + _this.currentString + '\n\n\n\n';
+				_this.ui.value = _this.value + ( !_this.disabled ? '> ' + _this.currentString : '') + '\n\n\n\n';
 			}
 			
 			_this.ui.scrollTop = 1000000;
@@ -61,6 +57,8 @@ function Command(container) {
 		}, 500);
 		
 		document.addEventListener('keydown', function(event) {
+		
+			if(_this.disabled) return false;
 						
 			if(document.activeElement === _this.ui){
 			
@@ -80,6 +78,7 @@ function Command(container) {
 		
 		this.ui.addEventListener('keypress', function(event) {
 		
+			if(_this.disabled) return false;
 					
 			if(event.which === 8){
 				event.preventDefault();
@@ -120,12 +119,24 @@ function Command(container) {
 
 }
 
+Command.prototype.disable = function () {
+
+	this.disabled = true;
+
+};
+
+Command.prototype.enable = function () {
+
+	this.disabled = false;
+
+};
+
 Command.prototype.import = function (commands) {
 
 	if(commands !== undefined && typeof commands === 'object'){
 		this.commands = commands;
 	} else {
-		console.log('missing or invalid object');
+		if(debug) console.log('missing or invalid object');
 		return false;
 	}
 	
@@ -153,7 +164,7 @@ Command.prototype.add = function (path, response) {
 		}
 		
 	} else {
-		console.log('missing or invalid parameters');
+		if(debug) console.log('missing or invalid parameters');
 		return false;
 	}
 	
@@ -262,6 +273,6 @@ Command.prototype.print = function (string) {
 	this.historyCount = null;
 
 	this.value = this.value + '> ' + string + '\n';
-	this.ui.value = this.value + '> ' + this.currentString + '\n\n\n\n';
+	this.ui.value = this.value + ( !this.disabled ? '> '+this.currentString : '') + '\n\n\n\n';
 
 };
