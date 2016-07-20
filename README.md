@@ -35,3 +35,24 @@ command.print('hello world');
 ```
 
 You can toggle the history using your up and down arrow keys or manually using `command.backHistory()` and `command.forwardHistory()`.
+
+You can set the full list of accepted commands by creating an object. Each key is a command. A key value can be a new object of keys, a string response or a function. To import the new set of commands simply use `command.import(object)`.
+
+```javascript
+var newCommands = {
+	help: {
+		me: "i can help you",
+		you: "you can't help me",
+		default: "type 'help me' or 'help you'"
+	},
+	default: "type 'help'"
+};
+
+command.import(newCommands);
+```
+
+If you would like to add a command to your existing set of commands you can use the `command.add(path, response)`. The path is a string where every layer is period separated. The response can be a string or a function. If the path already exists it will be overwritten.
+
+```javascript
+command.add('help.everybody', 'nobody can help everybody');
+```

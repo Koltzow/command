@@ -123,6 +123,47 @@ function Command(container) {
 
 }
 
+Command.prototype.import = function (commands) {
+
+	if(commands !== undefined && typeof commands === 'object'){
+		this.commands = commands;
+	} else {
+		console.log('missing or invalid object');
+		return false;
+	}
+	
+	return true;
+
+};
+
+Command.prototype.add = function (path, response) {
+	
+	if(path !== undefined && response !== undefined && typeof path === 'string' && (typeof response === 'string' || typeof response === 'function')){
+		
+		var pathArray = path.split('.');
+		var currentPath = this.commands;
+		
+		for (var i = 0; i < pathArray.length; i++) {
+			
+			var key = pathArray[i].toLowerCase();
+			
+			if(currentPath[key] === undefined){
+				currentPath[key] = (i < pathArray.length-1)?{}:response;
+			}
+			
+			currentPath = currentPath[key];
+			
+		}
+		
+	} else {
+		console.log('missing or invalid parameters');
+		return false;
+	}
+	
+	return true;
+	
+}
+
 Command.prototype.backHistory = function () {
 
 	if(this.history.length < 1) return false;
@@ -131,6 +172,7 @@ Command.prototype.backHistory = function () {
 	this.historyCount = (this.historyCount < this.history.length-1)?this.historyCount+1:0;
 	this.currentString = this.history[this.historyCount];
 	
+	return true;
 
 };
 
@@ -142,6 +184,7 @@ Command.prototype.forwardHistory = function () {
 	this.historyCount = (this.historyCount <= 0)?this.history.length-1:this.historyCount-1;
 	this.currentString = this.history[this.historyCount];
 	
+	return true;
 
 };
 

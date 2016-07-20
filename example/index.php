@@ -27,6 +27,19 @@
 	
 		var command = new Command(document.getElementById('command'));
 		command.print('hello world');
+		
+		var newCommands = {
+			help: {
+				me: "i can help you",
+				you: "you can't help me",
+				default: "type 'help me' or 'help you'"
+			},
+			default: "type 'help'"
+		};
+		
+		command.import(newCommands);
+		
+		command.add('help.everybody', 'nobody can help everybody');
 	
 	</script>
 
