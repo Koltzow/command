@@ -36,7 +36,7 @@ command.print('hello world');
 
 You can toggle the history using your up and down arrow keys or manually using `command.backHistory()` and `command.forwardHistory()`.
 
-You can set the full list of accepted commands by creating an object. Each key is a command. A key value can be a new object of keys, a string response or a function. To import the new set of commands simply use `command.import(object)`.
+You can set the full list of accepted commands by creating an object. Each key is a command. A key value can be a new object of keys, a string response or a function. To import the new set of commands simply use `command.import(object)`. Add a deafult if you would like a default response if the command is not found.
 
 ```javascript
 var newCommands = {

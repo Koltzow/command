@@ -61,9 +61,7 @@ function Command(container) {
 		}, 500);
 		
 		document.addEventListener('keydown', function(event) {
-		
-			console.log(event);
-				
+						
 			if(document.activeElement === _this.ui){
 			
 				if(event.which === 8){
@@ -85,7 +83,6 @@ function Command(container) {
 					
 			if(event.which === 8){
 				event.preventDefault();
-				console.log('prevent backspace');
 			}
 		
 			if(
