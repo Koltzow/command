@@ -31,7 +31,7 @@ command.setSize('100%', 300);
 You can print to the console using `command.print(string)`.
 
 ```javascript
-command.print('hello user');
+command.print('hello world');
 ```
 
-You can toggle the history user your up and down arrow keys or manually using `command.backHistory()` and `command.forwardHistory()`.
+You can toggle the history using your up and down arrow keys or manually using `command.backHistory()` and `command.forwardHistory()`.
